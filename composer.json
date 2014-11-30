@@ -1,0 +1,22 @@
+{
+    "name": "godisco/acltree-bundle",
+    "type": "symfony-bundle",
+    "homepage": "http://www.GoDisco.net",
+    "description": "Acl tree of relations bundle for symfony2",
+    "keywords": ["acl", "tree", "parent", "child", "relations", "symfony"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "AlmogBaku",
+            "email": "almog@SocialBelong.com",
+            "homepage": "http://www.AlmogBaku.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-0": { "GoDisco\\AclTreeBundle": "" }
+    },
+
+    "target-dir": "GoDisco/AclTreeBundle"
+}

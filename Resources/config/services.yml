@@ -1,0 +1,42 @@
+services:
+    acl.tree.reader:
+        class: GoDisco\AclTreeBundle\Annotation\AclParentReader
+        arguments:
+            doctrine:                           "@doctrine"
+            reader:                             "@annotation_reader"
+            accessor:                           "@property_accessor"
+
+    security.acl.user_permission.map:
+        class: %security.acl.permission.map.class%
+
+    acl.tree.voter:
+        class:      GoDisco\AclTreeBundle\Security\Authorization\Voter\AclTreeVoter
+        public:     false
+        arguments:
+            aclProvider:                        "@security.acl.provider"
+            oidRetrievalStrategy:               "@security.acl.object_identity_retrieval_strategy"
+            sidRetrievalStrategy:               "@security.acl.security_identity_retrieval_strategy"
+            permissionMap:                      "@security.acl.user_permission.map"
+            logger:                             "@logger"
+            allowIfObjectIdentityUnavailable:   true
+            doctrine:                           "@doctrine"
+            aclReader:                          "@acl.tree.reader"
+        tags:
+           - { name: security.voter }
+
+    acl.tree.helper:
+        class: GoDisco\AclTreeBundle\Security\Helper\AclTreeHelper
+        arguments:
+            doctrine:           "@doctrine"
+            securityContext:    "@security.context"
+            aclReader:          "@acl.tree.reader"
+            aclConnection:      "%acl.connection%"
+            maskBuilderClass:   Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder
+
+    acl.object.users:
+        class: GoDisco\AclTreeBundle\Security\Helper\AclUsersHelper
+        arguments:
+            doctrine:           "@doctrine"
+            accessor:           "@property_accessor"
+            aclConnection:      "%acl.connection%"
+            maskBuilderClass:   Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder
