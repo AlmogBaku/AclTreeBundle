@@ -16,6 +16,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Driver\Connection;
 
+/**
+ * Class AclTreeHelper
+ * @package GoDisco\AclTreeBundle\Security\Helper
+ */
 class AclTreeHelper
 {
     /** @var EntityManagerInterface */
@@ -73,11 +77,11 @@ class AclTreeHelper
     }
 
     /**
-     * Make the query supported ACL permissions
+     * Filter query to show only items the the $user have access to by ACL.
      *
      * @param QueryBuilder $queryBuilder
      * @param array $permissions
-     * @param UserInterface $user
+     * @param UserInterface $user [default: logged-in user]
      * @throws AccessDeniedException not found logged-in user
      * @return Query
      */

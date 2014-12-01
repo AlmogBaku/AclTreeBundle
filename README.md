@@ -115,7 +115,7 @@ For filtering only entities the user have access to, apply the **@acl.tree.helpe
 ```
 
 ### Using the AclUsers helper
-For showing all the users who have directly access to the object/entity, apply the `acl.object.users` service on your `Entity` object:
+For showing all the users who have directly access to the entity, apply the `acl.object.users` service on your `Entity` object:
 
 #### Methods:
 - **get($entity, $user_class[array $permissions = array("VIEW"))**

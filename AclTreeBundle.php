@@ -11,6 +11,10 @@ namespace GoDisco\AclTreeBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Class AclTreeBundle
+ * @package GoDisco\AclTreeBundle
+ */
 class AclTreeBundle extends Bundle
 {
 }

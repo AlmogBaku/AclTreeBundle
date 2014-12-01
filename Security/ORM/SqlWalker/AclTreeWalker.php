@@ -10,6 +10,10 @@ namespace GoDisco\AclTreeBundle\Security\ORM\SqlWalker;
 use Doctrine\ORM\Query\SqlWalker;
 use Doctrine\ORM\Query;
 
+/**
+ * Class AclTreeWalker
+ * @package GoDisco\AclTreeBundle\Security\ORM\SqlWalker
+ */
 class AclTreeWalker extends SqlWalker
 {
     /**
@@ -57,7 +61,8 @@ class AclTreeWalker extends SqlWalker
     }
 
     /**
-     * Building ON phase for joining the AclQuery with the original query
+     * Building `ON` phrase for joining the AclQuery with the original query
+     *
      * @param $classesMap
      * @param $alias
      * @param int $lvl

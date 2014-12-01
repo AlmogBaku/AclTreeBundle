@@ -16,6 +16,10 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Doctrine\Common\Annotations\Reader;
 
+/**
+ * Class AclParentReader
+ * @package GoDisco\AclTreeBundle\Annotation
+ */
 class AclParentReader
 {
     /** @var PropertyAccessorInterface */
@@ -25,6 +29,13 @@ class AclParentReader
     /** @var ObjectManager */
     private $em;
 
+    /**
+     * Constructor
+     *
+     * @param RegistryInterface $doctrine
+     * @param Reader $reader
+     * @param PropertyAccessorInterface $accessor
+     */
     public function __construct(RegistryInterface $doctrine, Reader $reader, PropertyAccessorInterface $accessor)
     {
         $this->em = $doctrine->getManager();
@@ -33,6 +44,8 @@ class AclParentReader
     }
 
     /**
+     * Get the flat tree
+     *
      * @param {Entity/Field/Class} $obj
      * @return array of trees
      */
@@ -52,6 +65,8 @@ class AclParentReader
     }
 
     /**
+     * Get the tree metadata
+     *
      * @param {Entity/Field/Class} $class
      * @return array - meta tree
      */
@@ -75,6 +90,7 @@ class AclParentReader
     }
 
     /**
+     * Convert tree-metadata to flat tree
      *
      * @param $classesMap
      * @return array

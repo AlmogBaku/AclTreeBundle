@@ -13,6 +13,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 
+/**
+ * Class AclUsersHelper
+ * @package GoDisco\AclTreeBundle\Security\Helper
+ */
 class AclUsersHelper
 {
     /** @var  EntityManagerInterface */
@@ -47,7 +51,13 @@ class AclUsersHelper
         $this->maskBuilderClass = $maskBuilderClass;
     }
 
-
+    /**
+     * Get the list of all the users who have directly access to the entity.
+     * @param $entity
+     * @param $user_class
+     * @param array $permissions
+     * @return mixed
+     */
     public function get($entity, $user_class, array $permissions = array("EDIT"))
     {
         //Build permissions-mask
