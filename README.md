@@ -1,8 +1,16 @@
 AclTree Bundle
-===========
+==============
 AclTree Bundle allows you to create hierarchy relationship between your entities for ACL Permissions.
 
 For example, If I have `Edit` permissions for `Dan Brown books` entity, I will able to edit also the author `Dan Brown`, and all of his books.
+
+Table of contents:
+------------------
+- [Introduction](#acltree-bundle)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Changing the default MaskBuilder](#changing-the-default-maskbuilder)
+
 
 Installation:
 -------------
