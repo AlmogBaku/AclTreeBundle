@@ -34,8 +34,9 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        // ...
-        new GoDisco\AclTreeBundle\AclTreeBundle()
+        $bundles = array(
+            // ...
+            new GoDisco\AclTreeBundle\AclTreeBundle(),
     }
 ```
 
