@@ -1,3 +1,6 @@
+parameters:
+    security.acl.mask_builder: ~
+
 services:
     acl.tree.reader:
         class: GoDisco\AclTreeBundle\Annotation\AclParentReader
@@ -27,16 +30,16 @@ services:
     acl.tree.helper:
         class: GoDisco\AclTreeBundle\Security\Helper\AclTreeHelper
         arguments:
-            doctrine:           "@doctrine"
+            doctrine:           "@doctrine.orm.entity_manager"
             securityContext:    "@security.context"
             aclReader:          "@acl.tree.reader"
-            aclConnection:      "%acl.connection%"
-            maskBuilderClass:   Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder
+            aclConnection:      "@security.acl.dbal.connection"
+            maskBuilderClass:   "%security.acl.mask_builder%"
 
     acl.object.users:
         class: GoDisco\AclTreeBundle\Security\Helper\AclUsersHelper
         arguments:
-            doctrine:           "@doctrine"
+            doctrine:           "@doctrine.orm.entity_manager"
             accessor:           "@property_accessor"
-            aclConnection:      "%acl.connection%"
-            maskBuilderClass:   Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder
+            aclConnection:      "@security.acl.dbal.connection"
+            maskBuilderClass:   "%security.acl.mask_builder%"

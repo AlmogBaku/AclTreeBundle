@@ -32,6 +32,10 @@ class AclParentReader
         $this->accessor = $accessor;
     }
 
+    /**
+     * @param {Entity/Field/Class} $obj
+     * @return array of trees
+     */
     public function getAclEntityTree($obj)
     {
         /** @var ClassMetadata $metadata */
@@ -47,6 +51,10 @@ class AclParentReader
         return array($obj);
     }
 
+    /**
+     * @param {Entity/Field/Class} $class
+     * @return array - meta tree
+     */
     public function getAclMetaTree($class)
     {
         /** @var ClassMetadata $metadata */

@@ -3,8 +3,6 @@
  * @author  Almog Baku
  *          almog@GoDisco.net
  *          http://www.GoDisco.net/
- *
- * AclHelper - Based by gist authored by Anil (https://gist.github.com/mailaneel/1363377)
  */
 
 namespace GoDisco\AclTreeBundle\Security\ORM\SqlWalker;
@@ -70,7 +68,9 @@ class AclTreeWalker extends SqlWalker
         $ID = $classesMap['metadata']->getSingleIdentifierColumnName();
         $sql = "( acl_.class = \"{$class}\" AND acl_.id={$alias}.{$ID} )";
 
-        if(!isset($classesMap['parent'])) return $sql;
+        if(!isset($classesMap['parent'])) {
+            return $sql;
+        }
         return $sql . " OR " . $this->buildOn($classesMap['parent'], "jn{$lvl}", $lvl+1);
     }
 

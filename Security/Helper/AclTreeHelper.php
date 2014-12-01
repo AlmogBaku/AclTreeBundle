@@ -3,8 +3,6 @@
  * @author  Almog Baku
  *          almog@GoDisco.net
  *          http://www.GoDisco.net/
- *
- * AclHelper - Based by gist authored by Anil (https://gist.github.com/mailaneel/1363377)
  */
 
 namespace GoDisco\AclTreeBundle\Security\Helper;
@@ -12,39 +10,47 @@ namespace GoDisco\AclTreeBundle\Security\Helper;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use GoDisco\AclTreeBundle\Annotation\AclParentReader;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Driver\Connection;
 
 class AclTreeHelper
 {
-    /** @var  ObjectManager */
+    /** @var EntityManagerInterface */
     private $em;
     /** @var SecurityContextInterface */
     private $securityContext;
     /** @var  AclParentReader */
     private $aclReader;
-
+    /** @var string */
     private $maskBuilderClass;
+    /** @var Connection */
     private $aclConnection;
 
     /**
      * Constructor
      *
-     * @param RegistryInterface $doctrine
+     * @param EntityManagerInterface $em
      * @param SecurityContextInterface $securityContext
      * @param AclParentReader $aclReader
-     * @param $aclConnection
-     * @param $maskBuilderClass - Mask builder class name
+     * @param Connection $aclConnection acl connection
+     * @param string $maskBuilderClass - Mask builder class name
      */
-    function __construct(RegistryInterface $doctrine, SecurityContextInterface $securityContext, AclParentReader $aclReader, $aclConnection, $maskBuilderClass = 'Symfony\Component\Security\Acl\Permission\MaskBuilder')
+    function __construct(EntityManagerInterface $em, SecurityContextInterface $securityContext, AclParentReader $aclReader, Connection $aclConnection, $maskBuilderClass)
     {
-        $this->em = $doctrine->getManager();
+        $this->em = $em;
         $this->securityContext = $securityContext;
         $this->aclReader = $aclReader;
-        $this->aclConnection = $doctrine->getConnection($aclConnection);
+        $this->aclConnection = $aclConnection;
+
+        if(is_null($maskBuilderClass)) {
+            $maskBuilderClass = 'Symfony\Component\Security\Acl\Permission\MaskBuilder';
+        }
+        if(!class_exists($maskBuilderClass)) {
+            throw new \InvalidArgumentException("maskBuilderClass not exists");
+        }
         $this->maskBuilderClass = $maskBuilderClass;
     }
 
@@ -59,8 +65,9 @@ class AclTreeHelper
         $aclAppliedQuery = clone $query;
         $params = $query->getParameters();
 
-        foreach ($params as $param)
+        foreach ($params as $param) {
             $aclAppliedQuery->setParameter($param->getName(), $param->getValue(), $param->getType());
+        }
 
         return $aclAppliedQuery;
     }
@@ -79,8 +86,9 @@ class AclTreeHelper
         if($user==null) {
             $token = $this->securityContext->getToken();
             $user = $token->getUser();
-            if(!($user instanceof UserInterface))
+            if(!($user instanceof UserInterface)) {
                 throw new AccessDeniedException();
+            }
         }
 
         //create cloned query with sterility aliases
@@ -114,9 +122,10 @@ class AclTreeHelper
     /**
      * Get query for permitted entity ids(by acl) for user
      *
-     * @param Query $query
-     * @param QueryBuilder $queryBuilder
-     * @return String Sql
+     * @param array $classesMap
+     * @param int $mask
+     * @param UserInterface $user
+     * @return string
      */
     private function getAclQuery($classesMap, $mask, UserInterface $user)
     {
@@ -125,8 +134,9 @@ class AclTreeHelper
 
         //classes to search
         $classes = $this->aclReader->classesMap_to_list($classesMap);
-        foreach ($classes as $key=>$class)
+        foreach ($classes as $key=>$class) {
             $classes[$key] = '"' . $this->escapeNamespace($class) . '"';
+        }
         $classes = implode(", ", $classes);
 
         $userRoles = array('""');
@@ -136,8 +146,9 @@ class AclTreeHelper
 
             // The reason we ignore this is because by default FOSUserBundle adds ROLE_USER for every user
             foreach ($user->getRoles() as $role)
-                if ($role !== 'ROLE_USER')
+                if ($role !== 'ROLE_USER') {
                     $userRoles[] = '"' . $role . '"';
+                }
         }
         $userRoles = implode(", ", $userRoles);
 

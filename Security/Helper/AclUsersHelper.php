@@ -3,39 +3,47 @@
  * @author  Almog Baku
  *          almog@GoDisco.net
  *          http://www.GoDisco.net/
- *
- * AclHelper - Based by gist authored by Anil (https://gist.github.com/mailaneel/1363377)
  */
 
 namespace GoDisco\AclTreeBundle\Security\Helper;
 
+use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\Query;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 
 class AclUsersHelper
 {
-    /** @var  ObjectManager */
+    /** @var  EntityManagerInterface */
     private $em;
     /** @var PropertyAccessorInterface */
     private $accessor;
-
+    /** @var string */
     private $maskBuilderClass;
+    /** @var Connection */
     private $aclConnection;
 
     /**
      * Constructor
      *
-     * @param RegistryInterface $doctrine
+     * @param EntityManagerInterface $em
+     * @param PropertyAccessorInterface $accessor
      * @param $aclConnection
+     * @param string $maskBuilderClass - Mask builder class name
      */
-    function __construct(RegistryInterface $doctrine, PropertyAccessorInterface $accessor, $aclConnection, $maskBuilderClass = 'Symfony\Component\Security\Acl\Permission\MaskBuilder')
+    function __construct(EntityManagerInterface $em, PropertyAccessorInterface $accessor, Connection $aclConnection, $maskBuilderClass)
     {
-        $this->em = $doctrine->getManager();
+        $this->em = $em;
         $this->accessor = $accessor;
-        $this->aclConnection = $doctrine->getConnection($aclConnection);
+        $this->aclConnection = $aclConnection;
+
+        if(is_null($maskBuilderClass)) {
+            $maskBuilderClass = 'Symfony\Component\Security\Acl\Permission\MaskBuilder';
+        }
+        if(!class_exists($maskBuilderClass)) {
+            throw new \InvalidArgumentException("maskBuilderClass not exists");
+        }
         $this->maskBuilderClass = $maskBuilderClass;
     }
 
