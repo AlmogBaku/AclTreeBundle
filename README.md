@@ -86,8 +86,26 @@ You can use the regular [Symfony ACL voter](http://symfony.com/doc/current/cookb
 ```php
 $vote= $this->get('security.context')->isGranted('VIEW', $entity);
 ```
-
 (*) For more Information about using voters, visit the [Symfony documentation](http://symfony.com/doc/current/cookbook/security/voters_data_permission.html).
+
+
+In addition, you can also use the voter as annotation (duh?):
+```php
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+class BookController extends Controller
+{
+    /**
+     * @Security("is_granted('VIEW', post)")
+     */
+    public function showAction(Post $post)
+    {
+        //...
+    }
+}
+```
+(*) For more Information about using security annotations, visit the [Symfony documentation](http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/security.html#usage).
+
 
 ### Using the AclTree helper
 For filtering only entities the user have access to, apply the **@acl.tree.helper** service on your `QueryBuilder` object:
