@@ -89,7 +89,6 @@ $vote= $this->get('security.context')->isGranted('VIEW', $entity);
 (*) For more Information about using voters, visit the [Symfony documentation](http://symfony.com/doc/current/cookbook/security/voters_data_permission.html).
 
 <br />
-<br />
 
 In addition, you can also use the voter as annotation (duh?):
 ```php
