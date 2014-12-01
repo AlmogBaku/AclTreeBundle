@@ -10,15 +10,15 @@ Installation:
 -------------
 Add the following line into your `composer.json`, at the `require` section:
 
-#### composer.json
+##### composer.json
 ```json
     "require": {
        "godisco/acltree-bundle": "dev-master"
 ```
 
-Add this to your `AppKernel.php` (at the `registerBundles()` section):
+Add the **AclTree Bundle** to your `AppKernel` (at the `registerBundles()` section):
 
-#### app/AppKernel.php
+##### app/AppKernel.php
 ```php
 class AppKernel extends Kernel
 {
@@ -83,7 +83,7 @@ For filtering only entities the user have access to, apply the **@acl.tree.helpe
     - ***$queryBuilder***(*) - `QueryBuilder` object which select all the entities, **before the filtering**.
     - ***$permissions*** - array of permissions to check, default will check only for `VIEW`
     - ***$user*** - User entity to check, default will check for the logged-in user
-    - *returns* modified **`Query`** object.
+    - ***returns* modified `Query` object**.
 
 #### Example:
 ```php
