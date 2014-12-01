@@ -32,9 +32,11 @@ class AppKernel extends Kernel
 
 Usage:
 ------
-Using the AclTree is pretty simple! You just have to define the entity parents, then just apply to your query the AclTree helper.
+Using the AclTree is pretty simple!
+First, you need to [Define your entities parents](#defining-entity-parent), then just use the voter to know if access is granted to user, or apply the helpers for complex queries.
 
 - **[Defining entity parent](#defining-entity-parent)**
+- **[Using the voter](#using-the-voter)**
 - **[AclTreeHelper](#using-the-acltree-helper)** - Filtering entities by ACL.
 - **[AclUsersHelper](#using-the-acltree-helper)** - Showing all the users who have access by ACL.
 
@@ -64,6 +66,14 @@ class Book
 }
 ```
 *** Don't forget to add the `use GoDisco\AclTreeBundle\Annotation\AclParent;` part!***
+
+### Using the voter
+You can use the regular [Symfony Acl voter](http://symfony.com/doc/current/cookbook/security/acl.html#checking-access), in order to know if access is granted to the user:
+```php
+$vote= $this->get('security.context')->isGranted('VIEW', $entity);
+```
+
+(*) For more Information about using voters, visit the [Symfony documentation](http://symfony.com/doc/current/cookbook/security/voters_data_permission.html).
 
 ### Using the AclTree helper
 For filtering only entities the user have access to, apply the **@acl.tree.helper** service on your `QueryBuilder` object:
