@@ -83,7 +83,7 @@ For filtering only entities the user have access to, apply the **@acl.tree.helpe
     - ***$queryBuilder***(*) - `QueryBuilder` object which select all the entities, **before the filtering**.
     - ***$permissions*** - array of permissions to check, default will check only for `VIEW`
     - ***$user*** - User entity to check, default will check for the logged-in user
-    - ***returns* modified `Query` object**.
+    - ***returns*** modified **`Query`** object.
 
 #### Example:
 ```php
