@@ -51,7 +51,7 @@ First, you need to [Define your entities parents](#defining-entity-parent), then
 - **[AclTreeHelper](#using-the-acltree-helper)** - Filtering entities by ACL.
 - **[AclUsersHelper](#using-the-acltree-helper)** - Showing all the users who have access by ACL.
 
-
+<br />
 
 ### Defining entity parent
 Just add the `@AclParent` annotation to the parent member of your entity.
