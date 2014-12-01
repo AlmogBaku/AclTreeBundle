@@ -50,6 +50,9 @@ First, you need to [Define your entities parents](#defining-entity-parent), then
 - **[AclTreeHelper](#using-the-acltree-helper)** - Filtering entities by ACL.
 - **[AclUsersHelper](#using-the-acltree-helper)** - Showing all the users who have access by ACL.
 
+
+
+
 ### Defining entity parent
 Just add the `@AclParent` annotation to the parent member of your entity.
 
@@ -75,7 +78,8 @@ class Book
     private $author;
 }
 ```
-*** Don't forget to add the `use GoDisco\AclTreeBundle\Annotation\AclParent;` part!***
+
+*** Don't forget to include the annotation by adding the `use GoDisco\AclTreeBundle\Annotation\AclParent;` part! ***
 
 ### Using the voter
 You can use the regular [Symfony Acl voter](http://symfony.com/doc/current/cookbook/security/acl.html#checking-access), in order to know if access is granted to the user:
