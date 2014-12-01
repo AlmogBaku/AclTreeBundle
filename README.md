@@ -9,6 +9,10 @@ Table of contents:
 - [Introduction](#acltree-bundle)
 - [Installation](#installation)
 - [Usage](#usage)
+    - [Defining entity parent](#defining-entity-parent)
+    - [Using the voter](#using-the-voter)
+    - [AclTreeHelper](#using-the-acltree-helper)
+    - [AclUsersHelper](#using-the-acltree-helper)
 - [Changing the default MaskBuilder](#changing-the-default-maskbuilder)
 
 
