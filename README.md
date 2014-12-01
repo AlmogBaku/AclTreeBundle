@@ -52,7 +52,6 @@ First, you need to [Define your entities parents](#defining-entity-parent), then
 
 
 
-
 ### Defining entity parent
 Just add the `@AclParent` annotation to the parent member of your entity.
 
@@ -149,7 +148,7 @@ Changing the default MaskBuilder
 In some cases, you may wish to change the default `MaskBuilder`, to a custom mask map.
 You can just modify the MaskBuilder by overriding the `security.acl.mask_builder` parameter.
 
-For instance, example changing to use Sonata's MaskBuilder:
+For instance, example for changing the AclTree to use The Sonata's ACL MaskBuilder:
 ```yaml
 parameters:
     security.acl.mask_builder: Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder
