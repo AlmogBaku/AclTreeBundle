@@ -81,7 +81,7 @@ class Book
 *** Don't forget to include the annotation by adding the `use GoDisco\AclTreeBundle\Annotation\AclParent;` part! ***
 
 ### Using the voter
-You can use the regular [Symfony Acl voter](http://symfony.com/doc/current/cookbook/security/acl.html#checking-access), in order to know if access is granted to the user:
+You can use the regular [Symfony ACL voter](http://symfony.com/doc/current/cookbook/security/acl.html#checking-access), in order to know if access is granted to the user:
 ```php
 $vote= $this->get('security.context')->isGranted('VIEW', $entity);
 ```
