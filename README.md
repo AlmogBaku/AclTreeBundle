@@ -1,45 +1,132 @@
-Mailchimp Bundle
+AclTree Bundle
 ===========
+AclTree Bundle allows you to create hierarchy relationship between your entities for ACL Permissions.
 
-This bundle wrap the Mailchimp official PHP SDK for using inside Symfony as service.
-
-This bundle uses V2 of Mailchimp API.
+For example:
+`Books>>Dan Brown books>The Da Vinci Code`
+If I have `Edit` permissions for `Dan Brown books`, I will able to edit also the author `Dan Brown`, and all of his books.
 
 Installation:
 -------------
-Add this line to your composer.json "require" section:
+Add the following line into your `composer.json`, at the `require` section:
 
-### composer.json
+#### composer.json
 ```json
     "require": {
-       ...
-       "godisco/mailchimp-bundle": "dev-master"
+       "godisco/acltree-bundle": "dev-master"
 ```
 
-Add this to your AppKernel.php (in the registerBundles() section):
+Add this to your `AppKernel.php` (at the `registerBundles()` section):
 
-### app/AppKernel.php
+#### app/AppKernel.php
 ```php
 class AppKernel extends Kernel
 {
     public function registerBundles()
     {
         // ...
-        new GoDisco\MailchimpBundle\MailchimpBundle()
+        new GoDisco\AclTreeBundle\AclTreeBundle()
     }
 ```
 
 
 Usage:
 ------
+Using the AclTree is pretty simple! You just have to define the entity parents, then just apply to your query the AclTree helper.
 
-Just request for the `mailchimp` service.
+- **[Defining entity parent](#defining-entity-parent)**
+- **[AclTreeHelper](#using-the-acltree-helper)** - Filtering entities by ACL.
+- **[AclUsersHelper](#using-the-acltree-helper)** - Showing all the users who have access by ACL.
 
+### Defining entity parent
+Just add the `@AclParent` annotation to the parent member of your entity.
+
+#### Example:
 ```php
-$mailchimp = $container->get("mailchimp");
+use GoDisco\AclTreeBundle\Annotation\AclParent;
+use Acme\AuthorBundle\Entity\Author;
+
+/**
+ * Book
+ * @ORM\Table
+ * @ORM\Entity
+ */
+class Book
+{
+    /**
+     * @var Author
+     *
+     * @ORM\ManyToOne(targetEntity="Acme\AuthorBundle\Entity\Author")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @AclParent
+     */
+    private $author;
+}
+```
+*** Don't forget to add the `use GoDisco\AclTreeBundle\Annotation\AclParent;` part!***
+
+### Using the AclTree helper
+For filtering only entities the user have access to, apply the **@acl.tree.helper** service on your `QueryBuilder` object:
+
+#### Methods:
+- **apply(QueryBuilder $queryBuilder, [array $permissions = array("VIEW"), UserInterface $user = null])**
+    - ***$queryBuilder***(*) - `QueryBuilder` object which select all the entities, **before the filtering**.
+    - ***$permissions*** - array of permissions to check, default will check only for `VIEW`
+    - ***$user*** - User entity to check, default will check for the logged-in user
+    - *returns* modified **`Query`** object.
+
+#### Example:
+```php
+    /** @var \Doctrine\ORM\EntityManager\EntityManager $em */
+    $em = $this->getDoctrine()->getManager();
+    /** @var \GoDisco\AclTreeBundle\Security\Helper\AclTreeHelper $aclHelper */
+    $aclHelper = $this->get("acl.tree.helper");
+    
+    $qb = $em->createQueryBuilder();
+    $qb = $qb->select('e')
+        ->from('GoDisco\EventBundle\Entity\Event', 'e')
+        ->join("e.line", "l");
+
+    // The query object returned here is a clone obj so, you can always use $qb->getQuery() to get the original query obj
+    $query = $aclHelper->apply($qb);  // showing for current logged-in user
+    $result = $query->getArrayResult();
+    
+    return $result;
 ```
 
-You can get your default list id by:
+### Using the AclUsers helper
+For showing all the users who have directly access to the object/entity, apply the `acl.object.users` service on your `Entity` object:
+
+#### Methods:
+- **get($entity, $user_class[array $permissions = array("VIEW"))**
+    - ***$entity***(*) - entity to check
+    - ***$user_class***(*) - the class of the user object
+    - ***$permissions*** - array of permissions to check, default will check only for `EDIT`
+    - *returns* list of users.
+    
+#### Example:
 ```php
-$mailchimp->getDefualtList();
+    /** @var \Doctrine\ORM\EntityManager\EntityManager $em */
+    $em = $this->getDoctrine()->getManager();
+
+    $repo = $em->getRepository("VenueBundle:Venue");
+    $entity = $repo->find(1);
+
+    /** @var \GoDisco\AclTreeBundle\Security\Helper\AclUsersHelper $aclHelper */
+    $aclHelper = $this->get("acl.object.users");
+    
+    $users = $aclUsers->get($entity, 'Acme\UserBundle\Entity\User'); // showing for current logged-in user
+    return $users;
+```
+
+
+Changing the default MaskBuilder
+---------------------------------
+In some cases, you may wish to change the default `MaskBuilder`, to a custom mask map.
+You can just modify the MaskBuilder by overriding the `security.acl.mask_builder` parameter.
+
+For instance, example changing to use Sonata's MaskBuilder:
+```yaml
+parameters:
+    security.acl.mask_builder: Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder
 ```
