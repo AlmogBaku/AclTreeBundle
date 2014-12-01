@@ -2,7 +2,7 @@
     "name": "godisco/acltree-bundle",
     "type": "symfony-bundle",
     "homepage": "http://www.GoDisco.net",
-    "description": "AclTree Bundle allows you to create hierarchy relationship between your entities for ACL Permissions.",
+    "description": "Symfony2 Bundle for hierarchy relationship between entities with ACL Permissions.",
     "keywords": ["acl", "tree", "parent", "child", "relations", "symfony"],
     "license": "MIT",
     "authors": [
