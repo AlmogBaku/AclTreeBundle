@@ -48,7 +48,7 @@ class AclUsersHelper
     }
 
 
-    public function get($entity, $user_class, array $permissions = array("VIEW"))
+    public function get($entity, $user_class, array $permissions = array("EDIT"))
     {
         //Build permissions-mask
         $builder = new $this->maskBuilderClass();
